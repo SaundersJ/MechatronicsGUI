@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QProgressBar, QTextEdit, QCheckBox, QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QProgressBar, QTextEdit, QCheckBox, QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox, QComboBox, QLabel, QStyleFactory
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot, QThread
 
@@ -9,8 +9,8 @@ class GuiWindow(QMainWindow):
         self.title = 'Mouse Detection'
         self.left = 10
         self.top = 10
-        self.width = 800
-        self.height = 400
+        self.width = 1200
+        self.height = 600
 
         self.folderName = ""
         self.viewVideo = False
@@ -23,29 +23,25 @@ class GuiWindow(QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
  
         # Folder TextBox
-        self.textbox = QLineEdit(r"C:\Users\Jack\Desktop\python\Videos", self)
-        self.textbox.move(20, 20)
-        self.textbox.resize(280,20)
-
-        # Boolean show video
-        self.viewVideoBox = QCheckBox("Show Video", self)
-        self.viewVideoBox.move(20, 50)
+        self.textbox = QLineEdit(r"Command Here", self)
+        self.textbox.move(20, 440)
+        self.textbox.resize(900,20)
 
         # Create a button in the window
-        self.button = QPushButton('Start Detection', self)
-        self.button.move(20,80)
+        self.button = QPushButton('Send', self)
+        self.button.move(1080,440)
+
+        # Combo box (drop down box)
+        comboBox = QComboBox(self)
+        comboBox.addItem("Boat")
+        comboBox.addItem("Drone")
+        comboBox.move(930, 440)
 
         # Log Of How The program is doing
         self.log = QTextEdit(self)
         self.log.setReadOnly(True)
-        self.log.move(320, 20)
-        self.log.resize(300, 300)
-
-        self.currentStatusBar = QProgressBar(self)
-        self.currentStatusBar.setGeometry(20, 130, 280, 20)
-
-        self.totalStatusBar = QProgressBar(self)
-        self.totalStatusBar.setGeometry(20, 160, 280, 20)
+        self.log.move(20, 480)
+        self.log.resize(1160, 100)
 
         # connect button to function on_click
         self.button.clicked.connect(self.on_click)
@@ -54,13 +50,7 @@ class GuiWindow(QMainWindow):
  
     @pyqtSlot()
     def on_click(self):
-        self.logMessage("Started application")
-        self.logMessage("Settings:")
-        self.folderName = self.textbox.text()
-        self.logMessage(" - {}".format(self.folderName))
-        self.viewVideo = self.viewVideoBox.isChecked()
-        self.logMessage(" - {}".format(self.viewVideo))
-        self.clickedButton = True
+        self.logMessage("Sent: {}".format(self.textbox.text()))
 
         self.workerThread.start()
 
@@ -71,8 +61,8 @@ class GuiWindow(QMainWindow):
         return self.clickedButton
 
     def initMessage(self):
-        self.logMessage("Mouse Detection CUROP Project ...")
-        self.logMessage("Fill out the settings and then click start.")
+        self.logMessage("Hub for autonomous drone and boat")
+        self.logMessage("Cardiff University 4th Year Project 2018/2019")
  
 class WorkerThread(QThread):
 
